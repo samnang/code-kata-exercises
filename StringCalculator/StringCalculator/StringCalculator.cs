@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace StringCalculator.Tests
+namespace StringCalculator
 {
     public class StringCalculator
     {
