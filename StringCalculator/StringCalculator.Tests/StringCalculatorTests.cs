@@ -77,5 +77,15 @@ namespace StringCalculator.Tests {
         {
             Assert.Throws<ArgumentException>(() => _calculator.Sum(numbers));
         }
+
+        [TestCase(9, "//;\n2;3;4")]
+        [TestCase(2, "//.\n2")]
+        [TestCase(3, "//@\n1@2")]
+        public void Sum_NumbersWithCustomDelimiter_TotalOfNumbers(int expectedResult, string numbers)
+        {
+            int result = _calculator.Sum(numbers);
+
+            Assert.AreEqual(expectedResult, result);
+        }
     }
 }
