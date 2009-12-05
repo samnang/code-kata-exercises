@@ -87,5 +87,19 @@ namespace StringCalculator.Tests {
 
             Assert.AreEqual(expectedResult, result);
         }
+
+        [Test]
+        public void Sum_NegativeNumber_InvalidNumber()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _calculator.Sum("-1"));
+        }
+
+        [Test]
+        public void Sum_NegativeMultipleNumbers_DisplaysNegativeNumbers()
+        {
+            var error = Assert.Throws<ArgumentOutOfRangeException>(() => _calculator.Sum("-1,2,-3"));
+
+            Assert.That(error.Message, Is.StringContaining("-1,-3"));
+        }
     }
 }
