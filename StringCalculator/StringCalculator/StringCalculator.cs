@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace StringCalculator.Tests
 {
     public class StringCalculator
     {
+        private char[] _delimiters = new char[] {',', '\n'};
+
         public int Sum(string numbers)
         {
             if (string.IsNullOrEmpty(numbers))
@@ -11,7 +14,13 @@ namespace StringCalculator.Tests
 
             if (IsMultipleNumbers(numbers))
             {
-                return numbers.Split(',').Sum(number => int.Parse(number));
+                return numbers.Split(_delimiters).Sum(number =>
+                                                         {
+                                                             if(number == string.Empty)
+                                                                 throw new ArgumentException("Invalid numbers: {0}", numbers);
+
+                                                             return int.Parse(number);
+                                                         });
             }
 
             return int.Parse(numbers);
@@ -19,7 +28,7 @@ namespace StringCalculator.Tests
 
         private bool IsMultipleNumbers(string numbers)
         {
-            return numbers.Contains(",");
+            return numbers.Contains(_delimiters[0]) || numbers.Contains(_delimiters[1]);
         }
     }
 }

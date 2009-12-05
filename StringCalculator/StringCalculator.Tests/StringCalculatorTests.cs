@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using NUnit.Framework;
 
 namespace StringCalculator.Tests {
@@ -58,6 +59,23 @@ namespace StringCalculator.Tests {
             int result = _calculator.Sum("2, 3");
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void Sum_MultipleNumbersWithNewLine_TotalOfNumbers()
+        {
+            var expectedResult = 6;
+
+            int result = _calculator.Sum("1\n2,3");
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [TestCase("1\n")]
+        [TestCase("1\n,2,")]
+        public void Sum_HasDelimiterWithNoNumbers_InvalidNumbers(string numbers)
+        {
+            Assert.Throws<ArgumentException>(() => _calculator.Sum(numbers));
         }
     }
 }
