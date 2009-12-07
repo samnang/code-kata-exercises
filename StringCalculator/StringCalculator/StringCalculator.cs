@@ -21,7 +21,6 @@ namespace StringCalculator
             string[] items = numbers.Split(_delimiters.ToCharArray());
             string negativeNumbers = string.Empty;
             int totalNumbers = 0;
-
             foreach (string number in items)
             {
                 if (number == string.Empty)
@@ -37,7 +36,6 @@ namespace StringCalculator
             if (!string.IsNullOrEmpty(negativeNumbers))
                 throw new ArgumentOutOfRangeException("negatives not allowed: {0}",
                                                       negativeNumbers.Substring(0, negativeNumbers.Length - 1));
-
 
             return totalNumbers;
         }

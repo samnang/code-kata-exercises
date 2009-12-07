@@ -13,7 +13,7 @@ namespace StringCalculator.Tests {
         }
 
         [Test]
-        public void Sum_EmptyString_Zero()
+        public void Sum_EmptyString_ReturnZero()
         {
             var expectedResult = 0;
 
@@ -23,7 +23,7 @@ namespace StringCalculator.Tests {
         }
 
         [Test]
-        public void Sum_Null_Zero()
+        public void Sum_Null_ReturnZero()
         {
             var expectedResult = 0;
 
@@ -34,7 +34,7 @@ namespace StringCalculator.Tests {
 
         [TestCase(1, "1")]
         [TestCase(3, "3")]
-        public void Sum_OneNumber_Number(int expectedResult, string numbers)
+        public void Sum_OneNumber_ReturnTheNumber(int expectedResult, string numbers)
         {
             var result = _calculator.Sum(numbers);
 
@@ -43,7 +43,7 @@ namespace StringCalculator.Tests {
 
         [TestCase(5, "2,3")]
         [TestCase(10, "5,3,2")]
-        public void Sum_MulipleNumbers_TotalOfNumbers(int expectedResult, string numbers)
+        public void Sum_MulipleNumbers_ReturnTotalOfNumbers(int expectedResult, string numbers)
         {
             var result = _calculator.Sum(numbers);
 
@@ -51,7 +51,7 @@ namespace StringCalculator.Tests {
         }
 
         [Test]
-        public void Sum_MultipleNumbersWithSpace_TotalOfNumbers()
+        public void Sum_MultipleNumbersWithSpace_ReturnTotalOfNumbers()
         {
             var expectedResult = 5;
 
@@ -61,7 +61,7 @@ namespace StringCalculator.Tests {
         }
 
         [Test]
-        public void Sum_MultipleNumbersWithNewLine_TotalOfNumbers()
+        public void Sum_MultipleNumbersWithNewLine_ReturnTotalOfNumbers()
         {
             var expectedResult = 6;
 
@@ -72,7 +72,7 @@ namespace StringCalculator.Tests {
 
         [TestCase("1\n")]
         [TestCase("1\n,2,")]
-        public void Sum_HasDelimiterWithNoNumbers_InvalidNumbers(string numbers)
+        public void Sum_HasDelimiterWithNoNumbers_ErrorInvalidNumbers(string numbers)
         {
             Assert.Throws<ArgumentException>(() => _calculator.Sum(numbers));
         }
@@ -80,7 +80,7 @@ namespace StringCalculator.Tests {
         [TestCase(9, "//;\n2;3;4")]
         [TestCase(2, "//.\n2")]
         [TestCase(3, "//@\n1@2")]
-        public void Sum_NumbersWithCustomDelimiter_TotalOfNumbers(int expectedResult, string numbers)
+        public void Sum_NumbersWithCustomDelimiter_ReturnTotalOfNumbers(int expectedResult, string numbers)
         {
             int result = _calculator.Sum(numbers);
 
@@ -88,7 +88,7 @@ namespace StringCalculator.Tests {
         }
 
         [Test]
-        public void Sum_NegativeNumber_InvalidNumber()
+        public void Sum_NegativeNumber_ErrorInvalidNumber()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _calculator.Sum("-1"));
         }
