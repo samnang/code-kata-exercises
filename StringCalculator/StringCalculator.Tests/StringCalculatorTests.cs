@@ -1,10 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace StringCalculator.Tests {
+namespace StringCalculator.Tests
+{
     [TestFixture]
-    public class StringCalculatorTests {
-        private StringCalculator _calculator;
+    public class StringCalculatorTests
+    {
+        #region Setup/Teardown
 
         [SetUp]
         public void Setup()
@@ -12,93 +14,78 @@ namespace StringCalculator.Tests {
             _calculator = new StringCalculator();
         }
 
+        #endregion
+
+        private StringCalculator _calculator;
+
+        [TestCase("5", 5)]
+        [TestCase("20", 20)]
+        public void Add_OneNumber_ReturnTheNumber(string numbers, int expectedResult)
+        {
+            int result = _calculator.Add(numbers);
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [TestCase("5,5", 10)]
+        [TestCase("10,5", 15)]
+        [TestCase("2, 3", 5)]
+        public void Add_TwoNumber_ReturnSumOfNumbers(string numbers, int expectedResult)
+        {
+            int result = _calculator.Add(numbers);
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [TestCase("2\n3", 5)]
+        [TestCase("2\n10\n8", 20)]
+        public void Add_MulitpleNumbersWithNewLineDelimiter_ReturnSumOfNumbers(string numbers, int expectedResult)
+        {
+            int result = _calculator.Add(numbers);
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [TestCase("2,")]
+        [TestCase(",3")]
+        [TestCase("2,20,")]
+        public void Add_HasDelimiterWithNoNumber_ErrorInvalidNumbers(string numbers)
+        {
+            Assert.Throws<ArgumentException>(() => _calculator.Add(numbers));
+        }
+
+        [TestCase("//;\n2;3", 5)]
+        [TestCase("//.\n10.30", 40)]
+        public void Add_MultipleNumberWithCustomDelimiter_ReturnSumOfNumbers(string numbers, int expectedResult)
+        {
+            int result = _calculator.Add(numbers);
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [TestCase("-1,4,-5", "-1,-5")]
+        [TestCase("1,-20,-5,20", "-20,-5")]
+        public void Add_NegativeNumbers_DisplayNegativeNumbers(string numbers, string expectedResult)
+        {
+            var error = Assert.Throws<ArgumentException>(() => _calculator.Add(numbers));
+
+            Assert.IsTrue(error.Message.Contains(expectedResult));
+        }
+
         [Test]
-        public void Sum_EmptyString_ReturnZero()
+        public void Add_EmptyString_ReturnZero()
         {
-            var expectedResult = 0;
+            int expectedResult = 0;
 
-            var result = _calculator.Sum(string.Empty);
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [Test]
-        public void Sum_Null_ReturnZero()
-        {
-            var expectedResult = 0;
-
-            int result = _calculator.Sum(null);
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [TestCase(1, "1")]
-        [TestCase(3, "3")]
-        public void Sum_OneNumber_ReturnTheNumber(int expectedResult, string numbers)
-        {
-            var result = _calculator.Sum(numbers);
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [TestCase(5, "2,3")]
-        [TestCase(10, "5,3,2")]
-        public void Sum_MulipleNumbers_ReturnTotalOfNumbers(int expectedResult, string numbers)
-        {
-            var result = _calculator.Sum(numbers);
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [Test]
-        public void Sum_MultipleNumbersWithSpace_ReturnTotalOfNumbers()
-        {
-            var expectedResult = 5;
-
-            int result = _calculator.Sum("2, 3");
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [Test]
-        public void Sum_MultipleNumbersWithNewLine_ReturnTotalOfNumbers()
-        {
-            var expectedResult = 6;
-
-            int result = _calculator.Sum("1\n2,3");
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [TestCase("1\n")]
-        [TestCase("1\n,2,")]
-        public void Sum_HasDelimiterWithNoNumbers_ErrorInvalidNumbers(string numbers)
-        {
-            Assert.Throws<ArgumentException>(() => _calculator.Sum(numbers));
-        }
-
-        [TestCase(9, "//;\n2;3;4")]
-        [TestCase(2, "//.\n2")]
-        [TestCase(3, "//@\n1@2")]
-        public void Sum_NumbersWithCustomDelimiter_ReturnTotalOfNumbers(int expectedResult, string numbers)
-        {
-            int result = _calculator.Sum(numbers);
+            int result = _calculator.Add(string.Empty);
 
             Assert.AreEqual(expectedResult, result);
         }
 
         [Test]
-        public void Sum_NegativeNumber_ErrorInvalidNumber()
+        public void Add_NegativeNumbers_ErrorInvalidNumbers()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _calculator.Sum("-1"));
-        }
-
-        [Test]
-        public void Sum_NegativeMultipleNumbers_DisplaysNegativeNumbers()
-        {
-            var error = Assert.Throws<ArgumentOutOfRangeException>(() => _calculator.Sum("-1,2,-3"));
-
-            Assert.That(error.Message, Is.StringContaining("-1,-3"));
+            Assert.Throws<ArgumentException>(() => _calculator.Add("2,-1"));
         }
     }
 }
