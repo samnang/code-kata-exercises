@@ -1,41 +1,52 @@
-﻿using System;
+using System;
 
 namespace StringCalculator
 {
     public class StringCalculator
     {
+        private string _delimiters = ",\n";
+
         public int Add(string numbers)
         {
-            string delimiters = ",\n";
-
-            if (numbers == string.Empty)
+            if(string.IsNullOrEmpty(numbers))
                 return 0;
 
-            if (numbers.Contains("//"))
+            if(IsCustomDelimiter(numbers))
             {
-                delimiters += numbers[2];
-                numbers = numbers.Substring(4, numbers.Length - 4);
+                _delimiters += numbers[2];
+                numbers = GetNumbersForCustomDelimiter(numbers);
             }
 
-            int sum = 0;
+            int sumOfNumbers = 0;
             string negativeNumbers = string.Empty;
-            string[] items = numbers.Split(delimiters.ToCharArray());
 
-            foreach (string number in items)
+            var items = numbers.Split(_delimiters.ToCharArray());
+            foreach (var number in items)
             {
-                if (number == string.Empty)
+                if (string.IsNullOrEmpty(number))
                     throw new ArgumentException();
 
                 if (int.Parse(number) < 0)
                     negativeNumbers += string.Format("{0},", number);
 
-                sum += int.Parse(number);
+                sumOfNumbers += int.Parse(number);
             }
 
-            if (negativeNumbers != string.Empty)
-                throw new ArgumentException(negativeNumbers.Substring(0, negativeNumbers.Length - 1));
+            if(!string.IsNullOrEmpty(negativeNumbers))
+                throw new ArgumentException(string.Format("Negatives are not allow: \n{0}",
+                                                          negativeNumbers.Substring(0, negativeNumbers.Length - 1)));
 
-            return sum;
+            return sumOfNumbers;
+        }
+
+        private string GetNumbersForCustomDelimiter(string numbers)
+        {
+            return numbers.Substring(4, numbers.Length - 4);;
+        }
+
+        private bool IsCustomDelimiter(string numbers)
+        {
+            return numbers.Contains("//");
         }
     }
 }
