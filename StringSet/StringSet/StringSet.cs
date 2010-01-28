@@ -39,8 +39,8 @@ namespace StringSet {
         public static StringSet operator +(StringSet first, StringSet second) {
             var result = new StringSet();
 
-            CopyItem(first, result);
-            CopyItem(second, result);
+            CopyItems(first, result);
+            CopyItems(second, result);
 
             return result;
         }
@@ -56,7 +56,7 @@ namespace StringSet {
             return result;
         }
 
-        private static void CopyItem(StringSet source, StringSet destination) {
+        private static void CopyItems(StringSet source, StringSet destination) {
             foreach (var item in source._items) {
                 destination.Add(item);
             }
