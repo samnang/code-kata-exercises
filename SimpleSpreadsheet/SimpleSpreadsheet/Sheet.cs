@@ -17,6 +17,9 @@ namespace SimpleSpreadsheet {
         public string Get(string cell)
         {
             var literalValue = GetLiteral(cell);
+            if (IsFormula(literalValue))
+                return literalValue.Substring(1); 
+
             return HandleNumericValue(literalValue); 
         }
 
@@ -39,6 +42,11 @@ namespace SimpleSpreadsheet {
             {
                 _cells.Add(cell, value);   
             }
+        }
+
+        private bool IsFormula(string literalValue)
+        {
+            return literalValue.Length > 0 && literalValue[0] == '=';
         }
 
         private string HandleNumericValue(string value)
