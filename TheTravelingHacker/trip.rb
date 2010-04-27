@@ -1,6 +1,8 @@
 class Trip
 	attr_reader :stops
 	
+	InvalidStopError = Class.new(StandardError)
+	
 	def initialize(routing_service)
 		@routing_service = routing_service
 		@stops = []
@@ -8,6 +10,7 @@ class Trip
 	
 	def add_stop(stop_name)
 		raise InvalidStopError unless valid_location?(stop_name)
+		
 		@stops << stop_name
 	end
 	
@@ -36,16 +39,12 @@ class Trip
 		return zero_mile if @stops.length < 2
 		
 	  total_miles = 0
-		@stops.each_with_index do |stop, index|
-			origin = stop
-			destination = @stops[index + 1]
+		@stops.enum_for(:each_cons, 2).each do |origin, destination|
 			
 			miles = calculate_between_distances(origin,  destination)
 			total_miles += miles
 			
 			yield(origin, destination, miles) if block_given?
-			
-			break if index == @stops.length - 2
 		end
 		
 		total_miles
@@ -54,6 +53,4 @@ class Trip
 	def calculate_between_distances(origin, destination)
 		@routing_service.get("/distance", :origin => origin, :destination => destination)["miles"]
 	end
-	
-	InvalidStopError = Class.new(StandardError)
 end
